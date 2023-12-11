@@ -97,7 +97,7 @@ export default function Sidebar({ quizCount }: props) {
               </span>
             </Link>
           </li> */}
-          <li>
+          {/* <li>
             <Link
               href="/admin"
               className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -105,7 +105,7 @@ export default function Sidebar({ quizCount }: props) {
               <IoSettingsSharp size={25} className=" text-gray-500" />
               <span className="flex-1 ml-3 whitespace-nowrap">Setting</span>
             </Link>
-          </li>
+          </li> */}
           <div className=" absolute bottom-5 w-[90%]">
             <hr className="my-2" />
             <li>

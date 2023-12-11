@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Head from "next/head";
 
 import Sidebar from "@/app/components/Sidebar";
@@ -7,7 +8,13 @@ import Table from "@/app/components/Table";
 import { FiDownload } from "react-icons/fi";
 import { BsSearch } from "react-icons/bs";
 
-export default function home() {
+export default function Home() {
+  const [selectMajor, setMajor] = useState("");
+
+  const handleSelectMajorChange = (event: any) => {
+    setMajor(event.target.value);
+  };
+
   const headers: string[] = [
     "ลำดับ",
     "รหัสนักศึกษา",
@@ -30,6 +37,35 @@ export default function home() {
     { GPA: "3.50" },
     { GPA: "3.50" },
   ];
+
+  const major = [
+    "วิศวกรรมโยธา",
+    "วิศวกรรมเครื่องกล",
+    "วิศวกรรมเครื่องกล(นานาชาติ)",
+    "วิศวกรรมไฟฟ้า",
+    "วิศวกรรมอุตสาหการ",
+    "วิศวกรรมอุตสาหการ(นานาชาติ)",
+    "วิศวกรรมสิ่งแวดล้อม",
+    "วิศวกรรมเหมืองแร่",
+    "วิศวกรรมคอมพิวเตอร์",
+    "วิศวกรรมสารสนเทศและเครือข่าย",
+    "วิศวกรรมหุ่นยนต์และปัญญาประดิษฐ์",
+    "วิศวกรรมบูรณาการ",
+  ];
+
+  const calculateYear = () => {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020;
+    const years = [];
+    for (let i = startYear; i <= currentYear; i++) {
+      years.push(`1/${i + 543}`);
+      years.push(`2/${i + 543}`);
+    }
+    return years.reverse();
+  };
+
+  let years = calculateYear();
+
   return (
     <div className="flex h-screen w-screen  bg-slate-100 p-6 relative ">
       <Head>
@@ -41,7 +77,7 @@ export default function home() {
       </div>
       <div
         id="nav-sidebar"
-        className="h-full z-10 hidden md:flex  md:px-6 mb-2"
+        className="h-full z-10 hidden md:flex  md:pr-6 mb-2"
       >
         <Sidebar quizCount="0" />
       </div>
@@ -64,23 +100,45 @@ export default function home() {
               <div className="flex gap-2">
                 <div className="flex border-1 gap-2 items-center bg-gray-100 rounded-md px-4">
                   <BsSearch />
-                  <input
-                    placeholder="Search by name/student ID "
-                    className="  "
-                  ></input>
+                  <input placeholder="Search " className="  "></input>
                 </div>
 
                 {/*สาขาวิชา */}
                 <div className="p-2 bg-gray-100  text-gray-600  rounded-md">
-                  <select name="majors" id="major-select">
+                  <select
+                    name="majors"
+                    id="major-select"
+                    onChange={handleSelectMajorChange}
+                  >
                     <option>สาขาวิชา</option>
-                    <option value="civil">วิศวกรรมโยธา</option>
-                    <option value="computer">วิศวกรรมคอมพิวเตอร์</option>
-                    <option value="electrical">วิศวกรรมไฟฟ้า</option>
-                    <option value="environmental">วิศวกรรมสิ่งแวดล้อม</option>
-                    <option value="industrial">วิศวกรรมอุตสาหการ</option>
-                    <option value="mechanical">วิศวกรรมเครื่องกล</option>
-                    <option value="mining">วิศวกรรมเหมืองแร่</option>
+                    {major.map((item, index) => {
+                      return (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div className="p-2 bg-gray-100  text-gray-600  rounded-md">
+                  <select name="plan" id="plan-select">
+                    <option>แผนการเรียน</option>
+                    <option value="แผนปกติ">แผนปกติ</option>
+                    <option value="แผนสหกิจ">แผนสหกิจ</option>
+
+                    {selectMajor === "วิศวกรรมโยธา" ? (
+                      <option value="แผนก้าวหน้า">แผนก้าวหน้า</option>
+                    ) : null}
+                    {selectMajor === "วิศวกรรมไฟฟ้า" ? (
+                      <option value="แผนไฟฟ้าสื่อสาร">แผนไฟฟ้าสื่อสาร</option>
+                    ) : null}
+                    {selectMajor === "วิศวกรรมไฟฟ้า" ? (
+                      <option value="แผนไฟฟ้ากำลัง">แผนไฟฟ้ากำลัง</option>
+                    ) : null}
+                    {selectMajor === "วิศวกรรมไฟฟ้า" ? (
+                      <option value="แผนโครงการ">แผนโครงการ</option>
+                    ) : null}
                   </select>
                 </div>
 
@@ -88,20 +146,19 @@ export default function home() {
                 <div className="p-2 bg-gray-100  text-gray-600  rounded-md">
                   <select name="majors" id="major-select">
                     <option>ภาคการศึกษา</option>
-                    <option value="1/2566">1/2566</option>
-                    <option value="2/2566">2/2566</option>
-                    <option value="1/2565">1/2565</option>
-                    <option value="2/2565">2/2565</option>
-                    <option value="1/2564">1/2564</option>
-                    <option value="2/2564">2/2564</option>
-                    <option value="1/2563">1/2563</option>
-                    <option value="2/2563">2/2563</option>
+                    {years.map((item, index) => {
+                      return (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
 
-              <div className=" p-2 border-1 border rounded-md">
-                <button className=" flex justify-center items-center gap-2">
+              <div className=" ">
+                <button className=" flex hover:bg-blue-400 hover:text-white hover:border-blue-500 border-solid hover:border-double  p-2 border-2  rounded-md justify-center items-center gap-2">
                   <FiDownload />
                   Download Excel Report
                 </button>
@@ -111,7 +168,8 @@ export default function home() {
             <div>
               <div>
                 <h1 className=" font-semibold">
-                  Total {data ? data.length : 0} students
+                  Total <span className="">{data ? data.length : 0}</span>{" "}
+                  students
                 </h1>
               </div>
             </div>

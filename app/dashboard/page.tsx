@@ -1,34 +1,63 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+
 import Head from "next/head";
 
 import Sidebar from "@/app/components/Sidebar";
-import Table from "@/app/components/Table";
+import TableUser from "@/app/components/TableUser";
+import Tabs from "@/app/components/Tabs";
+import TableCourse from "@/app/components/TableCourse";
+import ModalAddUser from "./ModalAddUser";
 
 import { FiDownload } from "react-icons/fi";
 import { BsSearch } from "react-icons/bs";
+import { IoPersonAdd } from "react-icons/io5";
+import { MdOutlineNoteAdd } from "react-icons/md";
+import { AiFillFileAdd } from "react-icons/ai";
 
-export default function home() {
-  const headers: string[] = [
-    "ลำดับ",
-    "รหัสนักศึกษา",
+interface Course {
+  code: string;
+  name: string;
+  type: string;
+  credit: number;
+}
+
+export default function Dashboard() {
+  const [showModal, setShowModal] = useState(false);
+  const [activeTab, setActiveTab] = useState(false);
+
+  console.log(activeTab);
+
+  const headersUser: string[] = [
+    "ลำดับที่",
     "ชื่อ-นามสกุล",
-    "สาขาวิชา",
-    "เกรดเฉลี่ย",
+    "อีเมล",
+    "ตำแหน่ง",
+    "แก้ไข/ลบ",
+  ];
+  const headersCourse: string[] = [
+    "รหัสวิชา",
+    "ชื่อวิชา",
+    "หมวดหมู่วิชา",
+    "หน่วยกิต",
+    "แก้ไข/ลบ",
+  ];
+  const dataUser = [
+    { name: "แมว สีขาว", email: "meowWhite@gmeow.com", role: "Admin" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
+    { name: "แมว สีดำ", email: "meowBlack@gmeow.com", role: "Staff" },
   ];
 
-  const data = [
-    { studentID: "620610589" },
-    { name: "ธัญ อนันตรัตน์" },
-    { major: "วิศวกรรมคอมพิวเตอร์" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
-    { GPA: "3.50" },
+  const dataCourse: Course[] = [
+    { code: "261217", name: "Data Structures", type: "วิชาแกน", credit: 3 },
+    { code: "261216", name: "Discrete Math", type: "วิชาแกน", credit: 3 },
   ];
   return (
     <div className="flex h-screen w-screen  bg-slate-100 p-6 relative ">
@@ -41,85 +70,58 @@ export default function home() {
       </div>
       <div
         id="nav-sidebar"
-        className="h-full z-10 hidden md:flex  md:px-6 mb-2"
+        className="h-full z-10 hidden md:flex  md:pr-6 mb-2"
       >
         <Sidebar quizCount="0" />
       </div>
 
-      <div> </div>
-
       <div
-        className="z-10 container w-full shadow-md    relative
+        className="z-10 container w-full shadow-md     relative
         h-full max-h-screen transition-all duration-200 ease-in-out   "
       >
         <div className=" bg-white h-full rounded-md p-10">
-          <div className="flex justify-between align-middle items-center">
-            <h1 className=" font-semibold text-xl">
-              รายชื่อนักศึกษาที่ได้รับทุน
-            </h1>
+          <div className="flex    justify-between align-middle items-center">
+            <h1 className=" font-semibold text-xl">จัดการระบบ</h1>
           </div>
           {/* Table */}
-          <div className="mt-16 grid gap-4">
-            <div className=" flex items-center justify-between ">
-              <div className="flex gap-2">
-                <div className="flex border-1 gap-2 items-center bg-gray-100 rounded-md px-4">
-                  <BsSearch />
-                  <input
-                    placeholder="Search by name/student ID "
-                    className="  "
-                  ></input>
-                </div>
-
-                {/*สาขาวิชา */}
-                <div className="p-2 bg-gray-100  text-gray-600  rounded-md">
-                  <select name="majors" id="major-select">
-                    <option>สาขาวิชา</option>
-                    <option value="civil">วิศวกรรมโยธา</option>
-                    <option value="computer">วิศวกรรมคอมพิวเตอร์</option>
-                    <option value="electrical">วิศวกรรมไฟฟ้า</option>
-                    <option value="environmental">วิศวกรรมสิ่งแวดล้อม</option>
-                    <option value="industrial">วิศวกรรมอุตสาหการ</option>
-                    <option value="mechanical">วิศวกรรมเครื่องกล</option>
-                    <option value="mining">วิศวกรรมเหมืองแร่</option>
-                  </select>
-                </div>
-
-                {/*ภาคการศึกษา */}
-                <div className="p-2 bg-gray-100  text-gray-600  rounded-md">
-                  <select name="majors" id="major-select">
-                    <option>ภาคการศึกษา</option>
-                    <option value="1/2566">1/2566</option>
-                    <option value="2/2566">2/2566</option>
-                    <option value="1/2565">1/2565</option>
-                    <option value="2/2565">2/2565</option>
-                    <option value="1/2564">1/2564</option>
-                    <option value="2/2564">2/2564</option>
-                    <option value="1/2563">1/2563</option>
-                    <option value="2/2563">2/2563</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className=" p-2 border-1 border rounded-md">
-                <button className=" flex justify-center items-center gap-2">
-                  <FiDownload />
-                  Download Excel Report
+          <div className="mt-16 grid relative   ">
+            <div className=" flex justify-between mb-4">
+              <Tabs activeTab={activeTab} changeTable={setActiveTab} />
+              {activeTab === false ? (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className=" w-40 justify-center flex gap-2 p-2 border items-center hover:bg-green-500 bg-green-400 text-white rounded-md"
+                >
+                  <IoPersonAdd size={20} />
+                  <h1>เพิ่มผู้ใช้งาน</h1>
                 </button>
-              </div>
+              ) : (
+                <button className="w-40 justify-center  flex gap-2 p-2 border items-center  hover:bg-green-500 bg-green-400 text-white rounded-md">
+                  {/* <MdOutlineNoteAdd size={20} /> */}
+                  <AiFillFileAdd size={20} />
+                  <h1>เพิ่มกระบวนวิชา</h1>
+                </button>
+              )}
             </div>
-
-            <div>
-              <div>
-                <h1 className=" font-semibold">
-                  Total {data ? data.length : 0} students
-                </h1>
-              </div>
-            </div>
-
-            <Table headers={headers} data={data} />
+            {activeTab === false ? (
+              <TableUser
+                headers={headersUser}
+                data={dataUser ? dataUser : []}
+              />
+            ) : (
+              <TableCourse
+                headers={headersCourse}
+                data={dataCourse ? dataCourse : []}
+              />
+            )}
           </div>
         </div>
       </div>
+      {showModal && (
+        <div className="z-10 top-0 left-0 absolute w-full">
+          <ModalAddUser handleShowModal={setShowModal} />
+        </div>
+      )}
     </div>
   );
 }
